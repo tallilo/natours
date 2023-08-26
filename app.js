@@ -22,13 +22,8 @@ const app = express();
 
 app.enable('trust proxy');
 // Use the 'cors' middleware to allow requests from a specific origin
-app.use(
-  cors({
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true, // You may need to set this depending on your application's needs
-  }),
-);
+app.use(cors());
+app.options('*'.cors());
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
