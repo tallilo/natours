@@ -23,7 +23,7 @@ const app = express();
 app.enable('trust proxy');
 // Use the 'cors' middleware to allow requests from a specific origin
 app.use(cors());
-app.options('*'.cors());
+app.options('*', cors());
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
