@@ -75,11 +75,15 @@ exports.deleteBooking = factory.deleteOne(Booking);
 const createBookingCheckout = async (session) => {
   const tour = session.client_reference_id;
   const user = await User.findOne({ email: session.customer_email }).id;
-  const line_items = await stripe.checkout.sessions.retrieve(session.id, {
-    expand: ['line_items'], // Request to include line items in the response
-  });
-  console.log(line_items);
-  const price = line_items[0].price_data.unit_amount / 100;
+  const session_include_items = await stripe.checkout.sessions.retrieve(
+    session.id,
+    {
+      expand: ['line_items'], // Request to include line items in the response
+    },
+  );
+  console.log(session_include_items);
+  const price =
+    session_include_items.line_items[0].price_data.unit_amount / 100;
   await Booking.create({ tour, user, price });
 };
 
