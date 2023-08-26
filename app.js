@@ -17,7 +17,7 @@ const tourRouter = require('./Routes/tourRoutes');
 const reviewRouter = require('./Routes/reviewRoutes');
 const bookingRouter = require('./Routes/bookingRoutes');
 const cookieParser = require('cookie-parser');
-const compression = require();
+const compression = require('compression');
 const app = express();
 // Use the 'cors' middleware to allow requests from a specific origin
 app.use(
