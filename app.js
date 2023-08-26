@@ -19,6 +19,8 @@ const bookingRouter = require('./Routes/bookingRoutes');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const app = express();
+
+app.enable('trust proxy');
 // Use the 'cors' middleware to allow requests from a specific origin
 app.use(
   cors({
