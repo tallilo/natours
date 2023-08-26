@@ -17,6 +17,7 @@ const tourRouter = require('./Routes/tourRoutes');
 const reviewRouter = require('./Routes/reviewRoutes');
 const bookingRouter = require('./Routes/bookingRoutes');
 const cookieParser = require('cookie-parser');
+const compression = require();
 const app = express();
 // Use the 'cors' middleware to allow requests from a specific origin
 app.use(
@@ -69,6 +70,7 @@ app.use(
     ],
   }),
 );
+app.use(compression());
 
 ///// the middleware accure in the order they are in the code
 

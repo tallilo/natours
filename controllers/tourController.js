@@ -170,7 +170,7 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
       },
     },
   });
-  console.log(distance, lat, lng, unit, tours, radius);
+
   res.status(200).json({
     status: 'success',
     results: tours.length,

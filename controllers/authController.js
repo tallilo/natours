@@ -47,7 +47,7 @@ exports.signup = catchAsync(async (req, res) => {
     role: req.body.role,
   });
   const url = `${req.protocol}://${req.get('host')}/me`;
-  console.log(url);
+
   await new Email(newUser, url).sendWelcom();
   createSendToken(newUser, 201, res);
 });
@@ -57,7 +57,6 @@ exports.login = catchAsync(async (req, res, next) => {
 
   ///1) check if email and password exist
   if (!email || !password) {
-    console.log('here');
     return next(new AppError('Please provide email and password', 400));
   }
 
@@ -65,7 +64,6 @@ exports.login = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ email }).select('+password');
   const correct = await user?.correctPassword(password, user.password);
   if (!user || !correct) {
-    console.log('here');
     return next(new AppError('Incorrect email or password', 401));
   }
 
@@ -92,7 +90,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
-  console.log(token);
 
   if (!token) {
     return next(
@@ -101,26 +98,25 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
   //2) verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log(decoded);
 
   //3) check if user is still exist
   const freshUser = await User.findById(decoded.id);
   if (!freshUser) {
     return next(new AppError('The user belong to the token doesn not exist'));
   }
-  console.log('user still exist');
+
   //4) check if user change pasword after gwt was issued
   if (freshUser.changedPasswordAfter(decoded.iat)) {
     return next(
       new AppError('User recently changed password! please log in again', 401),
     );
   }
-  console.log('password didnt changed!');
+
   /// grant access to protected route
   req.user = freshUser;
-  console.log('1');
+
   res.locals.user = freshUser;
-  console.log('2');
+
   next();
 });
 
@@ -202,24 +198,24 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 });
 exports.resetPassword = catchAsync(async (req, res, next) => {
   // 1) get user based on the token
-  console.log(1);
+
   const hashedToken = crypto
     .createHash('sha256')
     .update(req.params.token)
     .digest('hex');
-  console.log(hashedToken);
-  console.log(Date.now());
+  //console.log(hashedToken);
+  // console.log(Date.now());
 
   const user = await User.findOne({
     passwordResetToken: hashedToken,
     passwordResetExpires: { $gt: Date.now() },
   });
   //2) if token has not expired, and there is user ,set the new password
-  console.log(user);
+  //console.log(user);
   if (!user) {
     return next(new AppError('token is invalid or has expired', 400));
   }
-  console.log(3);
+
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
   user.passwordResetToken = undefined;
@@ -228,7 +224,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   //3) update changedPassword property for the user
   // 4) log the user in , send JWT
-  console.log(4);
+
   createSendToken(user, 200, res);
 });
 exports.updatePassword = catchAsync(async (req, res, next) => {
@@ -239,11 +235,11 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
     return next(new AppError('Your current password is wrong.', 401));
   }
   /// 3)if the password is currect
-  console.log('before password change');
+
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
   await user.save({ validateBeforeSave: true });
-  console.log('after password change');
+
   createSendToken(user, 200, res);
 
   //2) check if the posted password is correct

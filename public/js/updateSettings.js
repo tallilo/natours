@@ -6,8 +6,8 @@ export const updateSettings = async (data, type) => {
   try {
     const url =
       type === 'password'
-        ? 'http://localhost:3000/api/v1/users/updateMyPassword'
-        : 'http://localhost:3000/api/v1/users/updateMe';
+        ? '/api/v1/users/updateMyPassword'
+        : '/api/v1/users/updateMe';
     const res = await axios({
       method: 'PATCH',
       url,
@@ -19,7 +19,7 @@ export const updateSettings = async (data, type) => {
         location.assign('/me');
       }, 1500); */
     }
-    console.log(res);
+    //console.log(res);
   } catch (err) {
     showAlert('error', err.response.data.message);
   }

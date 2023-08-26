@@ -5,7 +5,7 @@ export const login = async (email, password) => {
     axios.defaults.withCredentials = true;
     const res = await axios({
       method: 'POST',
-      url: 'http://localhost:3000/api/v1/users/login',
+      url: '/api/v1/users/login',
       withCredentials: true, // Include this option
       headers: {
         'Content-Type': 'application/json',
@@ -21,7 +21,7 @@ export const login = async (email, password) => {
         location.assign('/');
       }, 1500);
     }
-    console.log(res);
+    //console.log(res);
   } catch (err) {
     showAlert('error', 'incorrect password or email, try again!');
   }
@@ -31,13 +31,13 @@ export const logout = async () => {
   try {
     const res = await axios({
       method: 'GET',
-      url: 'http://localhost:3000/api/v1/users/logout',
+      url: '/api/v1/users/logout',
       withCredentials: true, // Include this option
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    console.log(res);
+    //console.log(res);
     if (res.data.status === 'success') {
       location.reload(true);
     }
