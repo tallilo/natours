@@ -23,7 +23,7 @@ const createSendToken = (user, statusCode, req, res) => {
     //path: '/',
     httpOnly: true,
     //sameSite: 'Lax', // Set SameSite attribute to Lax
-    secure: req.secure || req.headers('x-forwarded-proto') === 'https',
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   });
   user.password = undefined;
 
